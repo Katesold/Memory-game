@@ -114,3 +114,15 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+.score-panel .timer {
+    text-align: center;
+    width: 50%;
+    display: inline-block;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    text-align: center;
+}

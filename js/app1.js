@@ -38,7 +38,6 @@ let shuffleCards = shuffle(cards);
 function createGame() {
     shuffleCards.forEach(function(addCards) {
         deck.appendChild(addCards);
-
     });
 }
 
@@ -48,6 +47,7 @@ let clickedCards = [];
 
 let moves = 0;
 
+let matched = [];
 let countingMoves = document.querySelector('.moves');
 countingMoves.innerHTML = moves;
 
@@ -66,6 +66,7 @@ cards.forEach(function(card) {
                 clickedCards[0].classList.add('open', 'show', 'match');
                 clickedCards[1].classList.add('open', 'show', 'match');
 
+                matched.push(clickedCards[0], clickedCards[1]);
                 clickedCards = [];
             } else {
 
@@ -91,21 +92,102 @@ cards.forEach(function(card) {
 });
 
 
+const modal = document.querySelector('.modal');
+
+const restart = document.querySelector('.restart');
+restart.addEventListener('click', function() {
+    window.location.reload();
+
+});
+
+
+const timerDiv = document.querySelector('.timer');
+let countingSec;
+let totalSecs = 0;
+
+// Set the default value to the timer's container
+timerDiv.innerHTML = totalSecs + 's';
+
+function startTime() {
+    countingSec = setInterval(function() {
+        // Increase the totalSeconds by 1
+        totalSecs++;
+        // Update the HTML Container with the new time
+        timerDiv.innerHTML = totalSecs + 's';
+    }, 1000);
+}
+
+function stopTime() {
+    clearInterval(countingSec);
+}
+
+/*
+
+
 const restart = document.querySelector('.restart');
 restart.addEventListener('click', function() {
     // Delete all cards
+    const allElem = document.getElementsByTagName('li');
+    for (let i = 0; i < allElem.length; i++) {
+        console.log('element');
+    }
     deck.innerHTML = '';
 
-    createGame();
-    //const newCards = document.querySelectorAll('.card');
-    card[i].classList.remove('open', 'show', 'disabled', 'match');
 
-    // Reset vars
-    clickedCards = [];
-    moves = 0;
-    countingMoves.innerHTML = moves;
-    starsAll.innerHTML = star + star + star;
+
+    shuffleCards = shuffle(cards);
+    shuffleCards.forEach(function(addCards) {
+        deck.appendChild(addCards);
+        clickedCards = [];
+
+
+        moves = 0;
+        countingMoves.innerHTML = moves;
+        starsAll.innerHTML = star + star + star;
+    });
 });
+
+*/
+
+
+
+/*
+const restart = document.querySelector('.restart');
+restart.addEventListener('click', function() {
+    // Delete all cards
+    cards.innerHTML = '';
+    const newC = document.querySelectorAll('card i');
+    /*newC.classList.remove('open', 'match', 'disabled');*/
+/*card.setAttribute('class', 'card');
+
+    for (let i = 0; i < cards.length; i++) {
+        const card = document.createElement('li');
+        card.classList.add('card');
+        card.innerHTML = `<i class="${card[i]}"></i>`;
+        deck.appendChild(card);
+
+
+        clickedCards = [];
+        moves = 0;
+        countingMoves.innerHTML = moves;
+        starsAll.innerHTML = star + star + star;
+        /*shuffleCards.forEach(function(addCards) {
+            deck.appendChild(addCards);
+    };
+});
+createGame();
+
+//const newCards = document.querySelectorAll('.card');
+cards.setAttribute('class', 'card');
+
+// Reset vars
+
+clickedCards = []; 
+moves = 0; 
+countingMoves.innerHTML = moves; 
+starsAll.innerHTML = star + star + star;
+});
+*/
 
 
 //listener for clicks
