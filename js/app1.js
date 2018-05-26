@@ -45,19 +45,53 @@ createGame();
 
 let clickedCards = [];
 
+let firstClick = true;
+const timerDiv = document.querySelector('.timer');
+let countingSec, totalSecs = 0;
+
+// add value to timer
+timerDiv.innerHTML = totalSecs + 's';
+
+
+
 let moves = 0;
 
 let matched = [];
 let countingMoves = document.querySelector('.moves');
 countingMoves.innerHTML = moves;
 
+let countMatches = 0;
 
-const starsAll = document.querySelector(".stars");
+const starsAll = document.querySelector('.stars');
+
 const star = `<li><i class="fa fa-star"></i></li>`;
 starsAll.innerHTML = star + star + star;
 
+
+function startTime() {
+    countingSec = setInterval(function() {
+
+        totalSecs++;
+
+        // display time
+        timerDiv.innerHTML = totalSecs + 's';
+    }, 1000);
+}
+
+function stopTime() {
+    clearInterval(countingSec);
+}
+
+
 cards.forEach(function(card) {
     card.addEventListener('click', function(elem) {
+        if (firstClick) {
+
+            startTime();
+
+            // don't start new counting
+            firstClick = false;
+        }
         clickedCards.push(card);
         card.classList.add('open', 'show', 'disabled');
 
@@ -67,7 +101,9 @@ cards.forEach(function(card) {
                 clickedCards[1].classList.add('open', 'show', 'match');
 
                 matched.push(clickedCards[0], clickedCards[1]);
+                countMatches++;
                 clickedCards = [];
+                winning();
             } else {
 
                 setTimeout(function() {
@@ -75,7 +111,7 @@ cards.forEach(function(card) {
                         card.classList.remove('open', 'show', 'disabled')
                     });
                     clickedCards = [];
-                }, 800);
+                }, 700);
             }
         }
         moves++;
@@ -91,8 +127,25 @@ cards.forEach(function(card) {
     });
 });
 
-
+//make modal appear upon winning
 const modal = document.querySelector('.modal');
+
+function winning() {
+    if (matched.length == 16) {
+        modal.innerHTML = ` <h2>Congratulations! You matched all the cards with 
+            ${moves} moves, 
+            in ${totalSecs} seconds
+            ${starsAll.innerHTML}
+            <h1>Restart Game?</h1>
+            <button type="button" onclick="reload();">Yes</button>
+            <button type="button" onclick="modal.style.display= 'none';">No</button>`
+        modal.classList.add('modal');
+        modal.style.display = 'block';
+        stopTime();
+
+    }
+}
+
 
 const restart = document.querySelector('.restart');
 restart.addEventListener('click', function() {
@@ -100,305 +153,9 @@ restart.addEventListener('click', function() {
 
 });
 
-
-const timerDiv = document.querySelector('.timer');
-let countingSec;
-let totalSecs = 0;
-
-// Set the default value to the timer's container
-timerDiv.innerHTML = totalSecs + 's';
-
-function startTime() {
-    countingSec = setInterval(function() {
-        // Increase the totalSeconds by 1
-        totalSecs++;
-        // Update the HTML Container with the new time
-        timerDiv.innerHTML = totalSecs + 's';
-    }, 1000);
+function reload() {
+    window.location.reload();
 }
-
-function stopTime() {
-    clearInterval(countingSec);
-}
-
-/*
-
-
-const restart = document.querySelector('.restart');
-restart.addEventListener('click', function() {
-    // Delete all cards
-    const allElem = document.getElementsByTagName('li');
-    for (let i = 0; i < allElem.length; i++) {
-        console.log('element');
-    }
-    deck.innerHTML = '';
-
-
-
-    shuffleCards = shuffle(cards);
-    shuffleCards.forEach(function(addCards) {
-        deck.appendChild(addCards);
-        clickedCards = [];
-
-
-        moves = 0;
-        countingMoves.innerHTML = moves;
-        starsAll.innerHTML = star + star + star;
-    });
-});
-
-*/
-
-
-
-/*
-const restart = document.querySelector('.restart');
-restart.addEventListener('click', function() {
-    // Delete all cards
-    cards.innerHTML = '';
-    const newC = document.querySelectorAll('card i');
-    /*newC.classList.remove('open', 'match', 'disabled');*/
-/*card.setAttribute('class', 'card');
-
-    for (let i = 0; i < cards.length; i++) {
-        const card = document.createElement('li');
-        card.classList.add('card');
-        card.innerHTML = `<i class="${card[i]}"></i>`;
-        deck.appendChild(card);
-
-
-        clickedCards = [];
-        moves = 0;
-        countingMoves.innerHTML = moves;
-        starsAll.innerHTML = star + star + star;
-        /*shuffleCards.forEach(function(addCards) {
-            deck.appendChild(addCards);
-    };
-});
-createGame();
-
-//const newCards = document.querySelectorAll('.card');
-cards.setAttribute('class', 'card');
-
-// Reset vars
-
-clickedCards = []; 
-moves = 0; 
-countingMoves.innerHTML = moves; 
-starsAll.innerHTML = star + star + star;
-});
-*/
-
-
-//listener for clicks
-/*for (let i = 0; i < cards.length; i++) {
-    cards[i].addEventListener('click', function() {
-        this.classList.add('open', 'show', 'disabled');
-
-        function matching() {
-
-            const thisCard = this;
-            const prevCard = clickedCards[0];
-
-            // check if this clicked card is the second card to match
-            if (clickedCards.length === 1) {
-
-                card.classList.add('open', 'show', 'disabled');
-                clickedCards.push(this);
-
-                // compare cards
-
-
-                if (thisCard.innerHTML === prevCard.innerHTML) {
-
-                    // match
-                    thisCard.classList.add('match');
-                    prevCard.classList.add('match');
-
-                    matched.push(thisCard, prevCard);
-
-                    clickedCards = [];
-
-                    if (matched.length === cards.length) {
-                        document.write('Game Over');
-                    }
-
-                } else {
-
-                    // wait then hide
-                    setTimeout(function() {
-                        thisCard.classList.remove('open', 'show', 'disabled');
-                        prevCard.classList.remove('open', 'show', 'disabled');
-
-                    }, 1000);
-
-                    openedCards = [];
-
-                }
-            } else {
-                // no match
-                /*thisCard.classList.add('open', 'show', 'disabled');
-                clickedCards.push(this);
-            }
-        }
-        matching();
-
-
-    });
-}*/
-
-//var to store clicked cards in an array
-/*let clickedCards = [];
-
-let matched = [];
-
-let moves = 0;*/
-
-
-/*function matching() {
-
-    const thisCard = this;
-    const prevCard = clickedCards[0];
-
-    // check if this clicked card is the second card to match
-    if (clickedCards.length === 1) {
-
-        card.classList.add('open', 'show', 'disabled');
-        clickedCards.push(this);
-
-        // compare cards
-
-
-        if (thisCard.innerHTML === prevCard.innerHTML) {
-
-            // match
-            thisCard.classList.add('match');
-            prevCard.classList.add('match');
-
-            matched.push(thisCard, prevCard);
-
-            clickedCards = [];
-
-            if (matched.length === cards.length) {
-                document.write('Game Over');
-            }
-
-        } else {
-
-            // wait then hide
-            setTimeout(function() {
-                thisCard.classList.remove('open', 'show', 'disabled');
-                prevCard.classList.remove('open', 'show', 'disabled');
-
-            }, 1000);
-
-            openedCards = [];
-
-        }
-    } else {
-        // no match
-        thisCard.classList.add('open', 'show', 'disabled');
-        clickedCards.push(this);
-    }
-}*/
-
-/*
-const restart = document.querySelector('.restart');
-restart.addEventListener('click', function() {
-
-    deck.innerHTML = '';
-
-    createGame();
-
-
-    matched = [];
-    moves = 0;
-    movesContainer.innerHTML = moves;
-    starsContainer.innerHTML = star + star + star;
-});*/
-
-
-/*function matching() {
-    /*clickedCards.push(this);
-    if (clickedCards.length === 1) {
-        moves++;
-        if (clickedCards[0].innerHTML === clickedCards[1].innerHTML) {
-
-            clickedCards[0].classList.add('match');
-            clickedCards[1].classList.add('match');
-            /*clickedCards[0].classList.remove('show', 'open');
-            clickedCards[1].classList.remove('show', 'open');
-
-            matched.push(clickedCards[0], clickedCards[1])
-            clickedCards.classList.add('disabled');
-
-            clickedCards = [];
-        } else {
-            clickedCards[0].classList.add('show', 'open', 'disabled');
-            clickedCards[1].classList.add('show', 'open', 'disabled');
-
-            setTimeout(function() {
-                clickedCards[0].classList.remove('show', 'open', 'disabled');
-                clickedCards[1].classList.remove('show', 'open', 'disabled');
-                clickedCards.push(this);
-
-                clickedCards.classList.add('card');
-                clickedCards = [];
-            }, 1000);
-            clickedCards = [];
-        }
-    }
-}
-
-
-
-const thisCard = this;
-const prevCard = clickedCards[0];*/
-
-//check if cards match
-/*if (clickedCards.length === 1) {
-
-    thisCard.classList.add('open');
-    thisCard.classList.add('show');
-    thisCard.classList.add('disabled');
-
-    clickedCards.push(this);
-
-    if (thisCard.innerHTML === prevCard.innerHTML) {
-
-        thisCard.classList.add('match');
-        prevCard.classList.add('match');
-
-        clickedCards = [];
-
-    } else {
-        thisCard.classList.remove('open', 'show', 'disabled');
-        prevCard.classList.remove('open', 'show', 'disabled');
-
-        clickedCards = [];
-    }
-
-} else {
-    thisCard.classList.add('open');
-    thisCard.classList.add('show');
-    thisCard.classList.add('disabled');
-
-    clickedCards.push(this);
-}
-
-
-
-
-});
-}*/
-
-
-
-
-
-
-
-
 
 
 
